@@ -1,10 +1,32 @@
 require 'cinch'
 
+class AutoOp
+  include Cinch::Plugin
+
+  listen_to :join
+  match(/autoop (on|off)$/)
+
+  def listen(m)
+    unless m.user.nick == bot.nick
+      m.channel.op(m.user) if @auto_op
+    end
+  end
+
+  def execute(m, option)
+    if(m.channel.opped?(m.user))
+      @auto_op = option == "on"
+    end
+    m.reply "AutoOp is now #{@auto_op  ? 'enabled' : 'disabled'}"
+  end
+
+end
+
 bot = Cinch::Bot.new do
   configure do |c|
     c.server = "irc.freenode.org"
     c.channels = ["#riotbot"]
     c.nick = "riotbot"		  
+    c.plugins.plugins = [AutoOp]
   end
 
   on :message, "hello" do |m|
@@ -27,3 +49,4 @@ def random_ftp()
 end
 
 bot.start
+
