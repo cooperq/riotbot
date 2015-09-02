@@ -24,7 +24,7 @@ end
 bot = Cinch::Bot.new do
   configure do |c|
     c.server = "irc.freenode.org"
-    c.channels = ["#riotbot"]
+    c.channels = ["#riotcon"]
     c.nick = "riotbot"		  
     c.plugins.plugins = [AutoOp]
   end
